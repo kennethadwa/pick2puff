@@ -124,7 +124,7 @@ $pg = isset($_GET["pg"]) ? $_GET["pg"] : "shop";
     <style>
         body {
             font-family: 'Arial', sans-serif !important;
-            background-color: #f0f2f5;
+            background-color: #343a40;
             color: black;
         }
 
@@ -195,10 +195,15 @@ $pg = isset($_GET["pg"]) ? $_GET["pg"] : "shop";
 <body>
 
     <!-- Navigation -->
+     <!-- Age restriction notice -->
+                   <div class="alert" role="alert" style="background: #343a40; color: white; text-shadow: 2px 2px 10px black; text-align: center; font-size: 1.5rem; font-weight: bold; border-bottom: 2px solid black;">
+                       You must be 18 years or older to access this site.
+                   </div>
+
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="index.php?pg=shop">
-                <img src="pics/logo1.png" alt="PICK 2 PUFF Logo" style="height: 40px;"> PICK 2 PUFF
+            <a class="navbar-brand" href="index.php?pg=shop" style="font-weight: bold; color: white; text-shadow: 2px 2px 10px black; font-size: 1.5rem;">
+                PICK 2 PUFF
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

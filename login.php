@@ -50,6 +50,13 @@ if (isset($_POST["btnlogin"])) {
                     <br>
                     <p>Don't have an account?<a href="signup.php"> sign up</a></p>
                    </header>
+
+
+                   <!-- Age restriction notice -->
+                   <div class="alert" role="alert" style="background: black; color: red;">
+                       You must be 18 years or older to access this site.
+                   </div>
+                   
                    
                    <div class="input-field">
                         <input type="text" class="input" id="email" name="email" required="" autocomplete="off">
