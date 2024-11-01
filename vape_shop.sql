@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 31, 2024 at 10:08 PM
+-- Generation Time: Nov 01, 2024 at 08:31 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -52,11 +52,10 @@ INSERT INTO `accounts` (`id`, `fullname`, `address`, `contact`, `email`, `passwo
 (7, 'asdadadad', 'adadsdada', '12333', 'qwerty', '123', NULL, NULL),
 (8, 'try', 'try lang', '0921212', 'try', '1234', NULL, NULL),
 (9, '', '', '', 'zeke', '123', NULL, NULL),
-(10, 'Blakie Bun', 'Balintawak, Lipa City', '09123456789', 'blakiebun11@gmail.com', 'NamRJ1r5M8$N', NULL, 2),
+(10, 'Jerome Almocera', 'Balintawak, Lipa City', '09123456789', 'jerome123@gmail.com', '12345678', NULL, 2),
 (11, '1', '1', '1', '1', '1', NULL, NULL),
 (12, 'sdadadasd', 'adadad', '1231231231', 'ada', '123', NULL, NULL),
-(13, 'Kenneth Ortigueras', 'Sabang, Lipa City', '09123456789', 'kennetics1@gmail.com', '', '103062293461497530351', 2),
-(15, 'Adam Jacob Bautista', '4217-Example Street, Mataas na Kahoy, Lipa City', '09123456789', 'shopime4@gmail.com', 'a203e33c1!@#4Aa1', NULL, 1);
+(15, 'Adam Jacob Bautista', '4217-Example Street, Mataas na Kahoy, Lipa City', '09123456789', 'adambautista@gmail.com', '12345678', NULL, 1);
 
 -- --------------------------------------------------------
 

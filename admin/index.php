@@ -148,15 +148,32 @@ ob_start();
                                 </li>
                                 <li><a class="dropdown-item active" href="#">Transactions</a></li>
                                 <li><a class="dropdown-item" href="index.php?pg=transaction">Transactions List</a></li>
+
+
                                 <li>
                                     <hr class="dropdown-divider" />
                                 </li>
+
+
                                 <li><a class="dropdown-item active" href="#">Management</a></li>
                                 <li><a class="dropdown-item" href="index.php?pg=categories">Categories</a></li>
                                 <li><a class="dropdown-item" href="index.php?pg=items">Items</a></li>
+
+
                                 <li>
                                     <hr class="dropdown-divider" />
                                 </li>
+
+
+                                <li><a class="dropdown-item active" href="#">Manage Account</a></li>
+                                <li><a class="dropdown-item" href="index.php?pg=user">User</a></li>
+
+
+                                <li>
+                                    <hr class="dropdown-divider" />
+                                </li>
+
+
                                 <li><a class="dropdown-item" href="logout.php">Log Out</a></li>
                             </ul>
                         </li>
@@ -185,6 +202,8 @@ ob_start();
                 if ($pg == "items") include("items.php");
                 if ($pg == "edit_item") include("edit_item.php");
                 if ($pg == "view_details") include("view_details.php");
+                if ($pg == "user") include("user-account.php");
+                if ($pg == "edit-user") include("edit-user.php");
                 ?>
             </div>
         <?php
