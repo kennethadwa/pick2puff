@@ -1,8 +1,8 @@
 <?php
 session_start(); // Start the session
-include("connect.php"); 
-require_once './config.php'; 
-require_once './vendor/autoload.php'; 
+include("connect.php");
+require_once './config.php';
+require_once './vendor/autoload.php';
 
 // Enable error reporting
 error_reporting(E_ALL);
@@ -11,14 +11,14 @@ ini_set('display_errors', 1);
 // Authenticate code from Google OAuth Flow
 if (isset($_GET['code'])) {
     $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
-    
+
     if (isset($token['access_token'])) {
         $client->setAccessToken($token['access_token']);
 
         // Get profile info
         $google_oauth = new \Google\Service\Oauth2($client);
         $google_account_info = $google_oauth->userinfo->get();
-        
+
         $userinfo = [
             'email' => $google_account_info['email'],
             'first_name' => $google_account_info['givenName'],
@@ -40,7 +40,7 @@ if (isset($_GET['code'])) {
             $_SESSION['id'] = $userinfo['id']; // Store the id from the database
         } else {
             // New user, insert into the database
-            $sql = "INSERT INTO accounts (fullname, token) VALUES ('{$userinfo['first_name']} {$userinfo['last_name']}', '{$userinfo['token']}')";
+            $sql = "INSERT INTO accounts (fullname, token, account_type) VALUES ('{$userinfo['first_name']} {$userinfo['last_name']}', '{$userinfo['token']}', 2)";
             $result = mysqli_query($con, $sql);
 
             if (!$result) {
@@ -58,7 +58,7 @@ if (isset($_GET['code'])) {
         echo '</pre>';
 
         // Redirect after login or account creation
-        header("Location: index.php?pg=shop"); 
+        header("Location: index.php?pg=shop");
         exit();
     } else {
         echo "Authentication failed. Please try again.";
@@ -95,7 +95,7 @@ if (mysqli_num_rows($result) > 0) {
 
 // Redirect if account_type is not set to 2
 if (!isset($_SESSION['account_type']) || $_SESSION['account_type'] != 2) {
-    header("Location: login.php"); 
+    header("Location: login.php");
     exit();
 }
 
@@ -131,9 +131,11 @@ $pg = isset($_GET["pg"]) ? $_GET["pg"] : "shop";
         .navbar {
             background-color: #343a40 !important;
         }
+
         .dropdown-menu {
             background-color: #343a40;
         }
+
         .dropdown-menu .dropdown-item {
             color: #ffffff !important;
         }
@@ -141,6 +143,7 @@ $pg = isset($_GET["pg"]) ? $_GET["pg"] : "shop";
         .dropdown-menu .dropdown-item:hover {
             background-color: #495057 !important;
         }
+
         .navbar-light .navbar-nav .nav-link {
             color: #ffffff !important;
         }
@@ -195,10 +198,10 @@ $pg = isset($_GET["pg"]) ? $_GET["pg"] : "shop";
 <body>
 
     <!-- Navigation -->
-     <!-- Age restriction notice -->
-                   <div class="alert" role="alert" style="background: #343a40; color: white; text-shadow: 2px 2px 10px black; text-align: center; font-size: 1.5rem; font-weight: bold; border-bottom: 2px solid black;">
-                       You must be 18 years or older to access this site.
-                   </div>
+    <!-- Age restriction notice -->
+    <div class="alert" role="alert" style="background: #343a40; color: white; text-shadow: 2px 2px 10px black; text-align: center; font-size: 1.5rem; font-weight: bold; border-bottom: 2px solid black;">
+        You must be 18 years or older to access this site.
+    </div>
 
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container px-4 px-lg-5">
@@ -221,17 +224,19 @@ $pg = isset($_GET["pg"]) ? $_GET["pg"] : "shop";
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="index.php?pg=shop">All Products</a></li>
-                            <li><hr class="dropdown-divider" /></li>
+                            <li>
+                                <hr class="dropdown-divider" />
+                            </li>
                             <?php
                             $q1 = mysqli_query($con, "SELECT * FROM categories");
                             while ($category = mysqli_fetch_array($q1)) {
                             ?>
-                            <li><a class="dropdown-item" href="index.php?pg=shop&categoryid=<?php echo $category['id']; ?>"><?php echo $category['category']; ?></a></li>
+                                <li><a class="dropdown-item" href="index.php?pg=shop&categoryid=<?php echo $category['id']; ?>"><?php echo $category['category']; ?></a></li>
                             <?php } ?>
                         </ul>
 
                     </li>
-     
+
                 </ul>
                 <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                     <li class="nav-item">
@@ -248,29 +253,29 @@ $pg = isset($_GET["pg"]) ? $_GET["pg"] : "shop";
                         if ($acc = mysqli_fetch_array($q2)) {
                         ?>
                             <ul class="navbar-nav mb-2 mb-lg-0 ms-lg-0">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><?php echo $acc['email']; ?></a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item active" href="#">Account</a></li>
-                                <li><a class="dropdown-item" href="index.php?pg=update">Update Account</a></li>
-                                <li>
-                                    <hr class="dropdown-divider" />
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><?php echo $acc['email']; ?></a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item active" href="#">Account</a></li>
+                                        <li><a class="dropdown-item" href="index.php?pg=update">Update Account</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider" />
+                                        </li>
+                                        <li><a class="dropdown-item active" href="#">Transactions</a></li>
+                                        <li><a class="dropdown-item" href="index.php?pg=transaction">Transactions List</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider" />
+                                        </li>
+                                        <li><a class="dropdown-item" href="logout.php">Log Out</a></li>
+                                    </ul>
                                 </li>
-                                <li><a class="dropdown-item active" href="#">Transactions</a></li>
-                                <li><a class="dropdown-item" href="index.php?pg=transaction">Transactions List</a></li>
-                                <li>
-                                    <hr class="dropdown-divider" />
-                                </li>
-                                <li><a class="dropdown-item" href="logout.php">Log Out</a></li>
                             </ul>
-                        </li>
-                    </ul>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="index.php?pg=update">Update Account</a></li>
                                 <li><a class="dropdown-item" href="index.php?pg=transaction">Transaction List</a></li>
                                 <li><a class="dropdown-item" href="logout.php">Log Out</a></li>
                             </ul>
-                        
+
                     </li>
                     &nbsp;
                     &nbsp;
@@ -278,8 +283,8 @@ $pg = isset($_GET["pg"]) ? $_GET["pg"] : "shop";
                     &nbsp;
                     <li>
                         <div style="width: 40px; height: 40px; padding:0; border-radius: 50%; background: white;">
-                        <a href="index.php?pg=chat"><img width="40" height="40" src="https://img.icons8.com/nolan/64/customer-support.png" alt="customer-support"/></a>
-                    </div>
+                            <a href="index.php?pg=chat"><img width="40" height="40" src="https://img.icons8.com/nolan/64/customer-support.png" alt="customer-support" /></a>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -287,28 +292,28 @@ $pg = isset($_GET["pg"]) ? $_GET["pg"] : "shop";
     </nav>
 
     <!-- Header -->
-        <header class="bg-image p-5 text-center shadow-1-strong rounded mb-0 text-white" style="background-image: url('pics/bg.jpg'); background-size: cover; background-repeat: no-repeat; border: 5px solid black; object-fit:cover;">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white"></br>
-                    <h1 class="display-2 fw-bolder" style="font-family: 'Pacifico', cursive; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 4px 4px 0 #000;">PICK 2 PUFF</h1>
-                    <p class="lead fw-normal text-white-100 mb-0" style="font-family: 'Open Sans', sans-serif; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Online Vape Shop</p></br></br></br></br>
-                </div>
+    <header class="bg-image p-5 text-center shadow-1-strong rounded mb-0 text-white" style="background-image: url('pics/bg.jpg'); background-size: cover; background-repeat: no-repeat; border: 5px solid black; object-fit:cover;">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white"></br>
+                <h1 class="display-2 fw-bolder" style="font-family: 'Pacifico', cursive; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 4px 4px 0 #000;">PICK 2 PUFF</h1>
+                <p class="lead fw-normal text-white-100 mb-0" style="font-family: 'Open Sans', sans-serif; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Online Vape Shop</p></br></br></br></br>
             </div>
-        </header>
+        </div>
+    </header>
     <!-- Section -->
     <section class="py-5" style="background: #1e2a32;
 ">
         <div class="container">
             <?php
-            if ($pg == "shop") include("shop.php");
-            if ($pg == "about") include("about.php");
-            if ($pg == "update") include("update.php");
-            if ($pg == "cart") include("cart.php");
-            if ($pg == "chat") include("chat.php");
-            if ($pg == "addcart") include("addcart.php");
-            if ($pg == "transaction") include("transaction.php");
-            if ($pg == "viewitemdetails") include("viewitemdetails.php");
-            if ($pg == "viewtransactiondetails") include("viewtransactiondetails.php");
+                            if ($pg == "shop") include("shop.php");
+                            if ($pg == "about") include("about.php");
+                            if ($pg == "update") include("update.php");
+                            if ($pg == "cart") include("cart.php");
+                            if ($pg == "chat") include("chat.php");
+                            if ($pg == "addcart") include("addcart.php");
+                            if ($pg == "transaction") include("transaction.php");
+                            if ($pg == "viewitemdetails") include("viewitemdetails.php");
+                            if ($pg == "viewtransactiondetails") include("viewtransactiondetails.php");
             ?>
         </div>
     </section>
@@ -319,10 +324,10 @@ $pg = isset($_GET["pg"]) ? $_GET["pg"] : "shop";
             <p class="text-white m-0 text-center">Copyright &copy; PICK2PUFF 2024</p>
         </div>
     </footer>
-    <?php } ?>
-    <!-- Bootstrap core JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<?php } ?>
+<!-- Bootstrap core JS -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 
 </html>
